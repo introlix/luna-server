@@ -24,7 +24,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.13  # Match your Python version
+        python-version: 3.13
 
     - name: Install Python Dependencies
       run: |
@@ -40,9 +40,15 @@ jobs:
       run: |
         ls -R dist
 
-    - name: Zip Binary
+    - name: Zip Binary (Linux)
+      if: runner.os == 'Linux'
       run: |
         zip -r luna-server-${{ matrix.os }}.zip dist/luna-server
+
+    - name: Zip Binary (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-${{ matrix.os }}.zip
 
     - name: Upload Binary
       uses: actions/upload-artifact@v3
