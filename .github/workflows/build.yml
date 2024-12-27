@@ -26,12 +26,6 @@ jobs:
       with:
         python-version: 3.13  # Match your Python version
 
-    - name: Download Dependencies (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update || true
-        sudo apt-get install -y build-essential libopenblas-dev || true
-
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
@@ -42,11 +36,19 @@ jobs:
       run: |
         pyinstaller luna-server.spec
 
+    - name: Verify Build Output
+      run: |
+        ls -R dist
+
+    - name: Zip Binary
+      run: |
+        zip -r luna-server-${{ matrix.os }}.zip dist/luna-server
+
     - name: Upload Binary
       uses: actions/upload-artifact@v3
       with:
         name: luna-server-${{ matrix.os }}
-        path: dist/luna-server
+        path: luna-server-${{ matrix.os }}.zip
 
   publish:
     name: Publish Release
@@ -57,10 +59,10 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Create Release
-      id: create_release  # Add an ID to reference its outputs
+      id: create_release
       uses: ncipollo/release-action@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN }}
         tag: ${{ github.run_number }}
         name: Release ${{ github.run_number }}
         body: Binary release for luna-server
@@ -71,6 +73,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/luna-server
+        asset_path: luna-server-${{ matrix.os }}.zip
         asset_name: luna-server-${{ matrix.os }}.zip
         asset_content_type: application/zip
