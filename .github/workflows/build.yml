@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build Binaries
@@ -26,10 +29,8 @@ jobs:
     - name: Download Dependencies (Linux)
       if: runner.os == 'Linux'
       run: |
-        # Ensure any dependencies required for the binaries are installed
         sudo apt-get update || true
         sudo apt-get install -y build-essential libopenblas-dev || true
-        # Optionally: Fetch precompiled binaries from a storage location (e.g., S3, GitHub releases, etc.)
 
     - name: Install Python Dependencies
       run: |
@@ -58,6 +59,7 @@ jobs:
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
+        token: ${{ secrets.TOKEN }}
         tag: ${{ github.run_number }}
         name: Release ${{ github.run_number }}
         body: Binary release for luna-server
