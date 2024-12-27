@@ -23,7 +23,8 @@ jobs:
       with:
         python-version: 3.13  # Match your Python version
 
-    - name: Download Dependencies
+    - name: Download Dependencies (Linux)
+      if: runner.os == 'Linux'
       run: |
         # Ensure any dependencies required for the binaries are installed
         sudo apt-get update || true
