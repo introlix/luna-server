@@ -1,0 +1,9 @@
+llama-cpp-python
+fastapi
+uvicorn
+python-docx
+PyPDF2
+beautifulsoup4
+markdown
+pyyaml
+striprtf
