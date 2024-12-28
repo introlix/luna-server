@@ -8,3 +8,4 @@ markdown
 pyyaml
 striprtf
 numpy
+langchain
