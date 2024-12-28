@@ -39,13 +39,16 @@ jobs:
       run: |
         ls -R dist
 
-    - name: Zip Binary
+        - name: Zip Binary (Linux)
+      if: startsWith(matrix.os, 'ubuntu')
       run: |
-        if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-          zip -r luna-server-linux.zip dist/luna-server;
-        else
-          Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-windows.zip;
-        fi
+        zip -r luna-server-linux.zip dist/luna-server
+
+    - name: Zip Binary (Windows)
+      if: startsWith(matrix.os, 'windows')
+      run: |
+        Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-windows.zip
+
 
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v3
