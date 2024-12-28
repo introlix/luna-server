@@ -39,15 +39,13 @@ jobs:
       run: |
         ls -R dist
 
-    - name: Zip Binary (Linux)
-      if: runner.os == 'Linux'
+    - name: Zip Binary
       run: |
-        zip -r luna-server-linux.zip dist/luna-server
-
-    - name: Zip Binary (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-windows.zip
+        if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+          zip -r luna-server-linux.zip dist/luna-server;
+        else
+          Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-windows.zip;
+        fi
 
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v3
@@ -66,10 +64,15 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Download Artifacts
+    - name: Download Linux Artifact
       uses: actions/download-artifact@v3
       with:
-        name: luna-server-${{ matrix.os }}
+        name: luna-server-ubuntu-latest
+
+    - name: Download Windows Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: luna-server-windows-latest
 
     - name: Create Release
       id: create_release
@@ -82,10 +85,18 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Upload Assets to Release
+    - name: Upload Linux Asset to Release
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: luna-server-${{ matrix.os }}.zip
-        asset_name: luna-server-${{ matrix.os }}.zip
+        asset_path: luna-server-linux.zip
+        asset_name: luna-server-linux.zip
+        asset_content_type: application/zip
+
+    - name: Upload Windows Asset to Release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: luna-server-windows.zip
+        asset_name: luna-server-windows.zip
         asset_content_type: application/zip
