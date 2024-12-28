@@ -42,18 +42,20 @@ jobs:
     - name: Zip Binary (Linux)
       if: runner.os == 'Linux'
       run: |
-        zip -r luna-server-linux-latest.zip dist/luna-server
+        zip -r luna-server-linux.zip dist/luna-server
 
     - name: Zip Binary (Windows)
       if: runner.os == 'Windows'
       run: |
-        Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-windows-latest.zip
+        Compress-Archive -Path dist\luna-server\* -DestinationPath luna-server-windows.zip
 
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v3
       with:
         name: luna-server-${{ matrix.os }}
-        path: luna-server-${{ matrix.os }}-latest.zip
+        path: |
+          luna-server-linux.zip
+          luna-server-windows.zip
 
   publish:
     name: Publish Release
@@ -68,13 +70,12 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: luna-server-${{ matrix.os }}
-        path: .
 
     - name: Create Release
       id: create_release
       uses: ncipollo/release-action@v1
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN }}
         tag: ${{ github.run_number }}
         name: Release ${{ github.run_number }}
         body: Binary release for luna-server
@@ -85,6 +86,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: luna-server-${{ matrix.os }}-latest.zip
-        asset_name: luna-server-${{ matrix.os }}-latest.zip
+        asset_path: luna-server-${{ matrix.os }}.zip
+        asset_name: luna-server-${{ matrix.os }}.zip
         asset_content_type: application/zip
