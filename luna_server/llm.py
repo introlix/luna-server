@@ -8,7 +8,7 @@ from docx import Document
 from PyPDF2 import PdfReader
 from markdown import markdown
 from xml.etree import ElementTree as ET
-from llama_cpp import Llama
+from luna_server.llm_chain import LLMChain
 
 class LLM:
     """
@@ -141,10 +141,6 @@ class LLM:
         Returns:
             dict: The completion.
         """
-        llm = Llama(
-            model_path=self.model_path, 
-            chat_format=self.chat_format
-        )
 
         # if scan_documents is true then read the document
         if self.scan_documents:
@@ -160,14 +156,11 @@ class LLM:
             """
 
         # Create chat completion with streaming enabled
-        output = llm.create_chat_completion(
-            messages=[
-                {"role": "system", "content": self.system_prompt},
-                {"role": "user", "content": self.prompt}
-            ],
-            stream=True
+        llm = LLMChain(
+            model_path=self.model_path,
+            chat_format=self.chat_format,
         )
+
+        output = llm._call(prompt=self.prompt, system_prompt=self.system_prompt, streaming=True)
         
         return output
-    
-    

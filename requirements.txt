@@ -9,3 +9,7 @@ pyyaml
 striprtf
 numpy
 langchain
+langchain-community
+llama-index
+llama-index-llms-langchain
+llama-index-embeddings-langchain

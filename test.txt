@@ -1,0 +1,12 @@
+The field of natural language processing has been revolutionized by large language models (LLMs), which showcase advanced capabilities and sophisticated solutions. Trained on extensive text datasets, these models excel in tasks like text generation, translation, summarization, and question-answering. Despite their power, LLMs may not always align with specific tasks or domains.
+
+In this tutorial, we will explore how fine-tuning LLMs can significantly improve model performance, reduce training costs, and enable more accurate and context-specific results.
+
+What is LLM Fine-tuning?
+Fine-tuning LLM involves the additional training of a pre-existing model, which has previously acquired patterns and features from an extensive dataset, using a smaller, domain-specific dataset. In the context of “LLM Fine-Tuning,” LLM denotes a “Large Language Model,” such as the GPT series by OpenAI. This approach holds significance as training a large language model from the ground up is highly resource-intensive in terms of both computational power and time. Utilizing the existing knowledge embedded in the pre-trained model allows for achieving high performance on specific tasks with substantially reduced data and computational requirements.
+
+Below are some of the key steps involved in LLM Fine-tuning:
+
+Select a pre-trained model: For LLM Fine-tuning first step is to carefully select a base pre-trained model that aligns with our desired architecture and functionalities. Pre-trained models are generic purpose models that have been trained on a large corpus of unlabeled data.
+Gather relevant Dataset: Then we need to gather a dataset that is relevant to our task. The dataset should be labeled or structured in a way that the model can learn from it.
+Preprocess Dataset: Once the dataset is ready, we need to do some preprocessing for fine-tuning by cleaning it, splitting it into training, validation, and test sets, and ensuring it’s compatible with the model on which we want to fine-tune.
